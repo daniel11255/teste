@@ -1079,19 +1079,6 @@ document.addEventListener('DOMContentLoaded', () => {
     returnToWelcome();
   });
 
-  document.getElementById('btn-gameover-ranking').addEventListener('click', () => {
-    closeModal('modal-gameover');
-    renderRanking();
-    openModal('modal-ranking');
-
-    // Impede que o ranking feche ao clicar fora quando aberto pela tela de vitória
-    const rankingOverlay = document.querySelector('#modal-ranking .modal-overlay');
-    if (rankingOverlay) {
-      rankingOverlay.style.pointerEvents = 'none';
-      rankingOverlay.style.cursor = 'default';
-    }
-  });
-
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
