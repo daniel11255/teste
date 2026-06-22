@@ -931,6 +931,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-ranking-welcome').addEventListener('click', () => {
     renderRanking();
     openModal('modal-ranking');
+    // Restaura clique fora para fechar (caso tenha sido bloqueado pela tela de vitória)
+    const rankingOverlay = document.querySelector('#modal-ranking .modal-overlay');
+    if (rankingOverlay) {
+      rankingOverlay.style.pointerEvents = '';
+      rankingOverlay.style.cursor = '';
+    }
   });
 
   document.getElementById('btn-sound').addEventListener('click', () => {
@@ -1077,6 +1083,13 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModal('modal-gameover');
     renderRanking();
     openModal('modal-ranking');
+
+    // Impede que o ranking feche ao clicar fora quando aberto pela tela de vitória
+    const rankingOverlay = document.querySelector('#modal-ranking .modal-overlay');
+    if (rankingOverlay) {
+      rankingOverlay.style.pointerEvents = 'none';
+      rankingOverlay.style.cursor = 'default';
+    }
   });
 
   let resizeTimer;
