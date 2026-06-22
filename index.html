@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏆 Copa do Mundo 2026 – Jogo das Bandeiras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== TELA DE BOAS-VINDAS ===== -->
+  <div id="screen-welcome" class="screen active">
+    <div class="stars"></div>
+    <div class="welcome-card">
+      <div class="welcome-logo">⚽</div>
+      <h1 class="welcome-title">Copa do Mundo</h1>
+      <h2 class="welcome-subtitle">Jogo das Bandeiras 2026</h2>
+      <p class="welcome-desc">Identifique as bandeiras dos 48 países participantes!</p>
+      <div class="form-group">
+        <label for="player-name">Seu nome</label>
+        <input type="text" id="player-name" placeholder="Digite seu nome..." maxlength="20" autocomplete="off" />
+        <div id="name-error" class="name-error hidden"></div>
+      </div>
+      <button id="btn-start" class="btn btn-primary btn-large">Começar</button>
+      <button id="btn-ranking-welcome" class="btn btn-outline">
+        🏅 Ver Ranking
+      </button>
+      <button id="btn-themes" class="btn btn-outline">
+        🎨 Temas
+      </button>
+      <button id="btn-reset" class="btn-reset-welcome">
+        🗑️ Resetar todos os dados
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== TELA PRINCIPAL DO JOGO ===== -->
+  <div id="screen-game" class="screen">
+
+    <!-- Header -->
+    <header class="game-header">
+      <div class="player-badge">
+        <span class="player-avatar">👤</span>
+        <div class="player-info">
+          <span id="display-name" class="player-name-display">Jogador</span>
+          <span id="display-score" class="player-score">✅ 0 &nbsp;|&nbsp; ❌ 0</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-sound" class="btn-icon" title="Som">🔊</button>
+      </div>
+    </header>
+
+    <!-- Info Bar -->
+    <div class="info-bar">
+      <div class="info-item">
+        <span class="info-label">Restam</span>
+        <span id="remaining-count" class="info-value">48</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Sorteados</span>
+        <span id="drawn-count" class="info-value">0</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Tempo</span>
+        <span id="time-display" class="info-value">00:00</span>
+      </div>
+    </div>
+
+    <!-- Roulette Section -->
+    <div class="roulette-section">
+      <div class="roulette-wrapper" id="roulette-wrapper">
+        <div class="roulette-marker">
+          <div class="marker-arrow top">▼</div>
+          <div class="marker-line"></div>
+          <div class="marker-arrow bottom">▲</div>
+        </div>
+        <div class="roulette-container" id="roulette-container">
+          <div class="roulette-track" id="roulette-track"></div>
+        </div>
+        <div class="roulette-fade left"></div>
+        <div class="roulette-fade right"></div>
+      </div>
+    </div>
+
+    <!-- Game Controls -->
+    <div class="game-controls" id="game-controls">
+      <button id="btn-spin" class="btn btn-spin">Girar</button>
+    </div>
+
+    <!-- Result Controls -->
+    <div class="result-controls hidden" id="result-controls">
+      <div class="result-phase" id="phase-question">
+
+        <div class="flag-stage">
+          <div class="flag-stage-glow"></div>
+          <img id="spotlight-flag-img" src="" alt="" class="flag-stage-img" />
+        </div>
+        <div class="flag-stage-meta">
+          <span class="spotlight-badge" id="spotlight-badge">Sorteio #1</span>
+          <span class="spotlight-remaining" id="spotlight-remaining">47 restantes</span>
+        </div>
+
+        <div class="country-name-wrapper">
+          <div id="country-name-blur" class="country-name-blur">██████████</div>
+          <div id="country-name-reveal" class="country-name-reveal hidden"></div>
+        </div>
+        <button id="btn-reveal" class="btn btn-reveal">Mostrar nome da bandeira</button>
+
+        <div class="answer-section">
+          <button id="btn-correct" class="btn btn-correct" disabled>✅ Acertou</button>
+          <button id="btn-wrong" class="btn btn-wrong" disabled>❌ Errou</button>
+        </div>
+        <div id="answer-feedback" class="answer-feedback-inline hidden"></div>
+
+        <button id="btn-spin-again" class="btn btn-spin hidden">Girar novamente</button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== MODAL: ERROU ===== -->
+  <div id="modal-wrong" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header wrong-header">
+        <h2>❌ Não foi dessa vez!</h2>
+      </div>
+      <div class="modal-body" id="wrong-body"></div>
+      <div class="modal-footer">
+        <button id="btn-wrong-close" class="btn btn-outline-sm">Fechar e continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: RANKING ===== -->
+  <div id="modal-ranking" class="modal hidden">
+    <div class="modal-overlay" data-close="modal-ranking"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="ranking-modal-title">🏅 Ranking</h2>
+        <button class="modal-close" data-close="modal-ranking">✕</button>
+      </div>
+      <div class="modal-body" id="ranking-body"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: HISTÓRICO ===== -->
+  <div id="modal-history" class="modal hidden">
+    <div class="modal-overlay" data-close="modal-history"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📜 Histórico da Partida</h2>
+        <button class="modal-close" data-close="modal-history">✕</button>
+      </div>
+      <div class="modal-body" id="history-body"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: FIM DE JOGO ===== -->
+  <div id="modal-gameover" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content gameover-content">
+      <div class="gameover-emoji">🏆</div>
+      <h2 class="gameover-title">Todos os países foram sorteados!</h2>
+      <p class="gameover-subtitle" id="gameover-player-name"></p>
+      <div class="gameover-stats" id="gameover-stats"></div>
+      <div class="gameover-actions">
+        <button id="btn-play-again" class="btn btn-primary">🔄 Nova Partida</button>
+        <button id="btn-gameover-ranking" class="btn btn-outline">🏅 Ver Ranking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: TEMAS ===== -->
+  <div id="modal-themes" class="modal hidden">
+    <div class="modal-overlay" data-close="modal-themes"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🎨 Escolha seu tema</h2>
+        <button class="modal-close" data-close="modal-themes">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="theme-list">
+          <button class="theme-option" data-theme="brasil">
+            <div class="theme-swatches">
+              <span style="background:#009c3b"></span>
+              <span style="background:#FFDF00"></span>
+              <span style="background:#002776"></span>
+            </div>
+            <div class="theme-info">
+              <div class="theme-name">Brasil 🇧🇷</div>
+              <div class="theme-desc">Verde, amarelo e azul — padrão</div>
+            </div>
+            <span class="theme-check">✓</span>
+          </button>
+          <button class="theme-option" data-theme="noite">
+            <div class="theme-swatches">
+              <span style="background:#7c3aed"></span>
+              <span style="background:#06b6d4"></span>
+              <span style="background:#f472b6"></span>
+            </div>
+            <div class="theme-info">
+              <div class="theme-name">Noite Neon 🌃</div>
+              <div class="theme-desc">Roxo, ciano e rosa</div>
+            </div>
+            <span class="theme-check">✓</span>
+          </button>
+          <button class="theme-option" data-theme="fogo">
+            <div class="theme-swatches">
+              <span style="background:#dc2626"></span>
+              <span style="background:#f59e0b"></span>
+              <span style="background:#1c1917"></span>
+            </div>
+            <div class="theme-info">
+              <div class="theme-name">Fogo 🔥</div>
+              <div class="theme-desc">Vermelho, laranja e carvão</div>
+            </div>
+            <span class="theme-check">✓</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONFETTI ===== -->
+  <div id="confetti-container" aria-hidden="true"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
