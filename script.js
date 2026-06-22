@@ -161,13 +161,13 @@ function launchConfetti() {
         width: ${size}px;
         height: ${size * (Math.random() * 1.5 + 0.5)}px;
         background: ${colors[Math.floor(Math.random() * colors.length)]};
-        animation-duration: ${Math.random() * 2.5 + 2}s;
-        animation-delay: ${Math.random() * 0.3}s;
+        animation-duration: ${Math.random() * 1.5 + 0.8}s;
+        animation-delay: ${Math.random() * 0.15}s;
         border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
       `;
       container.appendChild(p);
-      setTimeout(() => p.remove(), 4500);
-    }, i * 12);
+      setTimeout(() => p.remove(), 2500);
+    }, i * 6);
   }
 }
 
@@ -516,9 +516,14 @@ function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 // EXPORTAR PDF — tabela simples e objetiva
 // =====================================================
 
-function exportRankingPDF() {
-  let fileName = prompt('Nome do arquivo PDF:', 'ranking-copa2026');
-  if (fileName === null) return;
+function showPDFExportModal() {
+  const input = document.getElementById('pdf-filename-input');
+  input.value = 'ranking-copa2026';
+  input.focus();
+  openModal('modal-pdf-name');
+}
+
+function exportRankingPDF(fileName) {
   fileName = fileName.trim() || 'ranking-copa2026';
   if (!fileName.toLowerCase().endsWith('.pdf')) fileName += '.pdf';
 
@@ -646,7 +651,7 @@ function renderRanking() {
     const pdfBtn = document.createElement('button');
     pdfBtn.className   = 'btn-export-pdf-header';
     pdfBtn.textContent = '📄 PDF';
-    pdfBtn.addEventListener('click', exportRankingPDF);
+    pdfBtn.addEventListener('click', showPDFExportModal);
     rankingHeader.insertBefore(pdfBtn, rankingHeader.querySelector('.modal-close'));
   }
 
@@ -1022,23 +1027,40 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('btn-reset').addEventListener('click', () => {
-    if (confirm('⚠️ Tem certeza? Isso apagará TODO o ranking e dados de TODOS os jogadores permanentemente!')) {
-      localStorage.removeItem(LS_KEY);
-      alert('✅ Dados resetados com sucesso!');
-    }
+    openModal('modal-confirm-reset');
   });
 
-  // TEMAS — abrir modal e trocar tema
+  // TEMAS — aplicar tema Brasil por padrão
   applyTheme(getCurrentTheme());
-  document.getElementById('btn-themes').addEventListener('click', () => {
-    applyTheme(getCurrentTheme()); // garante .active correto
-    openModal('modal-themes');
+
+  // EVENT LISTENERS DOS MODAIS DE CONFIRMAÇÃO
+  document.getElementById('btn-reset-cancel').addEventListener('click', () => {
+    closeModal('modal-confirm-reset');
   });
-  document.querySelectorAll('.theme-option').forEach(el => {
-    el.addEventListener('click', () => {
-      applyTheme(el.dataset.theme);
-      setTimeout(() => closeModal('modal-themes'), 220);
-    });
+
+  document.getElementById('btn-reset-confirm').addEventListener('click', () => {
+    localStorage.removeItem(LS_KEY);
+    closeModal('modal-confirm-reset');
+    openModal('modal-reset-success');
+  });
+
+  document.getElementById('btn-reset-success-close').addEventListener('click', () => {
+    closeModal('modal-reset-success');
+  });
+
+  document.getElementById('btn-pdf-cancel').addEventListener('click', () => {
+    closeModal('modal-pdf-name');
+  });
+
+  document.getElementById('btn-pdf-confirm').addEventListener('click', () => {
+    const fileName = document.getElementById('pdf-filename-input').value;
+    closeModal('modal-pdf-name');
+    exportRankingPDF(fileName);
+  });
+
+  // Permitir Enter no input de nome do PDF
+  document.getElementById('pdf-filename-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-pdf-confirm').click();
   });
 
   document.addEventListener('click', e => {

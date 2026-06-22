@@ -29,9 +29,6 @@
       <button id="btn-ranking-welcome" class="btn btn-outline">
         🏅 Ver Ranking
       </button>
-      <button id="btn-themes" class="btn btn-outline">
-        🎨 Temas
-      </button>
       <button id="btn-reset" class="btn-reset-welcome">
         🗑️ Resetar todos os dados
       </button>
@@ -224,6 +221,63 @@
             <span class="theme-check">✓</span>
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: CONFIRMAÇÃO RESET ===== -->
+  <div id="modal-confirm-reset" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚠️ Tem certeza?</h2>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 14px; line-height: 1.6; text-align: center; margin-bottom: 16px;">
+          Isso apagará <strong>TODO o ranking e dados de TODOS os jogadores</strong> permanentemente. Esta ação não pode ser desfeita.
+        </p>
+      </div>
+      <div class="modal-footer" style="gap: 12px;">
+        <button id="btn-reset-cancel" class="btn btn-outline-sm">Cancelar</button>
+        <button id="btn-reset-confirm" class="btn btn-danger">Sim, remover tudo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: NOME DO ARQUIVO PDF ===== -->
+  <div id="modal-pdf-name" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📄 Exportar Ranking em PDF</h2>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 14px; margin-bottom: 16px; text-align: center;">
+          Digite o nome do arquivo:
+        </p>
+        <input type="text" id="pdf-filename-input" placeholder="ranking-copa2026" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--gray); background: rgba(255,255,255,0.1); color: var(--white); font-family: inherit;" />
+      </div>
+      <div class="modal-footer" style="gap: 12px;">
+        <button id="btn-pdf-cancel" class="btn btn-outline-sm">Cancelar</button>
+        <button id="btn-pdf-confirm" class="btn btn-primary">Exportar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: SUCESSO RESET ===== -->
+  <div id="modal-reset-success" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✅ Sucesso!</h2>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 14px; text-align: center;">
+          Todos os dados foram resetados com sucesso.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-reset-success-close" class="btn btn-primary">Ok</button>
       </div>
     </div>
   </div>
