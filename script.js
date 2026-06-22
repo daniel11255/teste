@@ -161,13 +161,13 @@ function launchConfetti() {
         width: ${size}px;
         height: ${size * (Math.random() * 1.5 + 0.5)}px;
         background: ${colors[Math.floor(Math.random() * colors.length)]};
-        animation-duration: ${Math.random() * 1.5 + 0.8}s;
-        animation-delay: ${Math.random() * 0.15}s;
+        animation-duration: ${Math.random() * 0.8 + 0.4}s;
+        animation-delay: ${Math.random() * 0.08}s;
         border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
       `;
       container.appendChild(p);
-      setTimeout(() => p.remove(), 2500);
-    }, i * 6);
+      setTimeout(() => p.remove(), 1500);
+    }, i * 3);
   }
 }
 
